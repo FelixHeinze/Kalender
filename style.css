@@ -1,0 +1,43 @@
+body{
+    background-color:lightgoldenrodyellow;
+    font-style: italic;
+
+    margin:0;
+    padding:0;
+}
+div.flex-container{
+    display:flex;
+    flex-direction:row;
+}
+
+@media screen and (max-width:600px){
+    div.flex-container{
+        flex-direction:column;
+    }
+}
+#samstag{
+    color: blue;
+}
+#sonntag{
+    color: red;
+}
+td:hover{
+    background-color: yellow;
+}
+table{
+    border: solid;
+    border-collapse: collapse;
+    text-align:center;
+    
+}
+th,tr,td{
+    border: solid;
+    border-color: black;
+    text-align:center;
+}
+th{
+    width:35px;
+}
+#heute{
+    color:red;
+}
