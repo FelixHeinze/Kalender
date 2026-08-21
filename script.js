@@ -1,5 +1,37 @@
-const months =["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
-const days = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+const months = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember"
+];
+const days = [
+    "Sonntag",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag"
+];
+const feiertage = [
+    new Date(2026,0,1),
+    new Date(2026,3,31),
+    new Date(2026,4,1),
+    new Date(2026,4,14),
+    new Date(2026,4,25),
+    new Date(2026,9,31 ),  
+    new Date(2026,10,18),
+    new Date(2026,11,25),
+    new Date(2026,11,26)
+]
 const _objectDatum = new Date();
 const _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
 const _objectXjahr = new Date(_objectDatum.getFullYear(),11,31);
