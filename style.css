@@ -5,14 +5,12 @@ body{
     margin:0;
     padding:0;
 }
-div.flex-container{
-    display:flex;
-    flex-direction:row;
-}
+
 
 @media screen and (max-width:600px){
-    div.flex-container{
-        flex-direction:column;
+    div.grid-container{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
     }
 }
 #samstag{
@@ -39,5 +37,25 @@ th{
     width:35px;
 }
 #heute{
-    color:red;
+    color: green;
+}
+
+
+.grid-container {
+     display: grid;
+     grid-template-columns: 1fr 1fr; /* zwei spalten oben */
+     grid-template-rows: auto auto; /*reihe oben und reihe unten */
+     gap: 10px; 
+}
+
+.item1 {
+    grid-column:1; /* links oben */
+}
+
+.item2 {
+     grid-column:2; /* rechts oben */
+}
+
+.item3 {
+    grid-column:1 / span 2; /* unten über beide spalten */
 }
