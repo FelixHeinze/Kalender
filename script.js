@@ -30,7 +30,7 @@ const feiertage = [
     new Date(2026,9,31 ),  
     new Date(2026,10,18),
     new Date(2026,11,25),
-    new Date(2026,11,26)
+    new Date(2026,11,24)
 ]
 const _objectDatum = new Date();
 const _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
@@ -54,6 +54,18 @@ document.getElementById("xTag").innerHTML = (Math.floor((_objectDatum-_objectXta
 document.getElementById("xJahresende").innerHTML=(Math.round((_objectXjahr-_objectDatum)/(1000*60*60*24)));
 document.getElementById("monatsname2").innerHTML = monatAusgeschrieben;
 document.getElementById("monatstage").innerHTML=(new Date(jahr,monat,0).getDate());
+// Feiertage in array gespeichert , neues datum wird erstellt, um nur das Datum zu vergleichen, ohne Uhrzeit. Dann wird überprüft, 
+// ob das heutige Datum in den 
+// Feiertagen enthalten ist.
+//  Wenn ja, wird "ein" angezeigt, sonst "kein".
 
+const heute = new Date();
+const heuteNorm = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
+const istFeiertag = feiertage.some(datumFeiertag => datumFeiertag.getTime() === heuteNorm.getTime());
+if (!istFeiertag) {
+    document.getElementById("feiertag").innerHTML = "kein"; }
+    else {
+    document.getElementById("feiertag").innerHTML = "ein"; 
+}     
 
 
