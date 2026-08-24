@@ -41,6 +41,7 @@ let jahr = _objectDatum.getFullYear();
 let tagAusgeschrieben = days[_objectDatum.getDay()];
 let monat = _objectDatum.getMonth();
 monat = monat+1;
+
 document.title = "Heute ist der " +tag+"."+monat +"."+jahr;
 document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom "+tag+"."+monat +"."+jahr;
 document.getElementById("datumAusgeschrieben").innerHTML = tag+ " "+monatAusgeschrieben+" "+jahr;
@@ -53,5 +54,6 @@ document.getElementById("xTag").innerHTML = (Math.floor((_objectDatum-_objectXta
 document.getElementById("xJahresende").innerHTML=(Math.round((_objectXjahr-_objectDatum)/(1000*60*60*24)));
 document.getElementById("monatsname2").innerHTML = monatAusgeschrieben;
 document.getElementById("monatstage").innerHTML=(new Date(jahr,monat,0).getDate());
+
 
 
