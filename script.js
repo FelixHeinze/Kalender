@@ -65,7 +65,7 @@ const istFeiertag = feiertage.some(datumFeiertag => datumFeiertag.getTime() === 
 if (!istFeiertag) {
     document.getElementById("feiertag").innerHTML = "kein"; }
     else {
-    document.getElementById("feiertag").innerHTML = "ein"; 
-}     
-
-
+        document.getElementById("feiertag").innerHTML = "ein"; 
+    }     
+        
+    
