@@ -8,7 +8,7 @@ body{
 
 
 @media screen and (max-width:600px){
-    div.grid-container{
+    div.grid-container{ /* grid-container für kleine bildschirme bswp handy*/
         grid-template-columns: 1fr;
         grid-template-rows: auto;
     }
