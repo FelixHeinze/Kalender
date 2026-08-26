@@ -68,4 +68,58 @@ if (!istFeiertag) {
         document.getElementById("feiertag").innerHTML = "ein"; 
     }     
         
-    
+    //funktion um die Tabelle zu erstellen
+    function createCalendar() {
+        const table = document.getElementById("kalenderDynamisch");
+        const year = _objectDatum.getFullYear();
+        const month = _objectDatum.getMonth();
+
+        // Lösche bestehende Zeilen (außer der Header)
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        // Erstelle neue Zeilen für den Kalender
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDayOfWeek = firstDay.getDay();
+        //sonntag = 0, montag = 1, dienstag = 2, mittwoch = 3, donnerstag = 4, freitag = 5, samstag = 6
+        //montag soll 0 werden, also muss 1 abgezogen werden, wenn der Wert 0 ist, soll er 6 sein
+        const adjustedStartingDayOfWeek = (startingDayOfWeek + 6) % 7;
+
+        let currentRow = table.insertRow();
+        let currentCell;
+
+        // Füge leere Zellen für die Tage vor dem ersten Tag hinzu
+        for (let i = 0; i < adjustedStartingDayOfWeek; i++) {
+            currentCell = currentRow.insertCell();
+            currentCell.innerHTML = "";
+        }
+
+        // Füge die Tage des Monats hinzu
+        for (let day = 1; day <= daysInMonth; day++) {
+            if (currentRow.cells.length === 7) {
+                currentRow = table.insertRow();
+            }
+            currentCell = currentRow.insertCell();
+            currentCell.innerHTML = day;
+            if (day === _objectDatum.getDate()) {
+                currentCell.style.backgroundColor = "yellow"; // Markiere den aktuellen Tag, kann auch als klasse in css ausgelagert werden, später
+            }
+            // Feiertage markieren
+            const currentDate = new Date(year, month, day);
+            const isHoliday = feiertage.some(datumFeiertag => datumFeiertag.getTime() === currentDate.getTime());
+            if (isHoliday) {
+                currentCell.style.backgroundColor = "red"; // Markiere Feiertage wird in css ausgelagert später
+            }
+        }
+        // leere Zellen für die Tage nach dem letzten Tag hinzufügen
+        while (currentRow.cells.length < 7) {
+            currentCell = currentRow.insertCell();
+            currentCell.innerHTML = "";
+        }
+    }
+
+    // Rufe die Funktion auf, um den Kalender zu erstellen
+    createCalendar();
