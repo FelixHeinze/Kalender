@@ -105,21 +105,42 @@ if (!istFeiertag) {
             currentCell = currentRow.insertCell();
             currentCell.innerHTML = day;
             if (day === _objectDatum.getDate()) {
-                currentCell.style.backgroundColor = "yellow"; // Markiere den aktuellen Tag, kann auch als klasse in css ausgelagert werden, später
+                currentCell.style.backgroundColor = "yellow"; // markiere den aktuellen tag, kann auch als klasse in css ausgelagert werden, später
             }
             // Feiertage markieren
             const currentDate = new Date(year, month, day);
             const isHoliday = feiertage.some(datumFeiertag => datumFeiertag.getTime() === currentDate.getTime());
             if (isHoliday) {
-                currentCell.style.backgroundColor = "red"; // Markiere Feiertage wird in css ausgelagert später
+                currentCell.style.backgroundColor = "red"; // markiere feiertage wird in css ausgelagert später
             }
         }
-        // leere Zellen für die Tage nach dem letzten Tag hinzufügen
+        // leere Zellen für die tage nach dem letzten tag hinzufügen
         while (currentRow.cells.length < 7) {
             currentCell = currentRow.insertCell();
             currentCell.innerHTML = "";
         }
     }
 
-    // Rufe die Funktion auf, um den Kalender zu erstellen
+   
     createCalendar();
+
+    //api anfrage für historische ereignisse am heutigen tag auf deutsch von wikipedia
+    fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
+        .then(response => response.json())
+        .then(data => {
+            const ereignisse = document.getElementById("ereignisse");
+            if (!ereignisse) return;
+
+            ereignisse.innerHTML = data.events
+                .map(event => `<li>${event.year}: ${event.text}</li>`)
+                .join("");
+        })
+        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
+    
+    //ausgabe von vier historischen ereignissen am heutigen tag, die in der api anfrage geladen wurden in der konsole
+    fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
+        .then(response => response.json())
+        .then(data => { 
+            console.log("Historische Ereignisse:", data.events.slice(0, 4));
+        })
+        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
