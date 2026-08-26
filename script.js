@@ -156,13 +156,13 @@ function writeToHtml() {
         })
         .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error)); //fehlerausgabe wenn api anfrage fehl schlägt bswp 400er für client fehler 
     
-    //ausgabe von vier historischen ereignissen am heutigen tag, die in der api anfrage geladen wurden in der konsole
+/*     //ausgabe von vier historischen ereignissen am heutigen tag, die in der api anfrage geladen wurden in der konsole
     fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
         .then(response => response.json())
         .then(data => { 
             console.log("Historische Ereignisse:", data.events.slice(0, 4)); // ausgabe von vier ereignissen, slice schneidet die ersten vier heraus
         })
-        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
+        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error)); */
 
         //ausgabe von vier historischen ereignissen am heutigen tag, die in der api anfrage geladen wurden in der liste 
         fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
@@ -171,7 +171,7 @@ function writeToHtml() {
             const ereignisseListe = document.getElementById("historischeEreignisse");
             if (!ereignisseListe) return;
             ereignisseListe.innerHTML = data.events.slice(0, 4)
-                .map(event => `<li>${event.year}: ${event.text}</li>`)
+                .map(event => `<li>${event.year}: ${event.text}</li>`) 
                 .join("");
         })
         .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
