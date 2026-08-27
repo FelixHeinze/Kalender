@@ -175,3 +175,19 @@ function writeToHtml() {
                 .join("");
         })
         .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
+        //funktionalität für die buttons um den monat zu wechseln, die in der index.html datei vorhanden sind
+        function vorherigerMonat() {
+            _objectDatum.setMonth(_objectDatum.getMonth() - 1);  // monat aktualisieren und kalender neu laden
+            createCalendar();
+        }
+
+        function naechsterMonat() {
+            _objectDatum.setMonth(_objectDatum.getMonth() + 1); //monat aktualisieren und kalender neu laden 
+            createCalendar();
+        }
+
+        //überlegung für klick auf eine zelle in der tabelle --> onclick auf jede zelle , oder eventlistener auf die tabelle,
+        //  dann wird überprüft ob die zelle angeklickt wurde, wenn ja, wird das datum in der zelle ausgelesen 
+        // und in der variable _objectDatum gespeichert, dann wird die funktion writeToHtml() 
+        // aufgerufen um die dynamischen inhalte zu aktualisieren (historische ereignisse, datum,etc)
+        
