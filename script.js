@@ -190,4 +190,15 @@ function writeToHtml() {
         //  dann wird überprüft ob die zelle angeklickt wurde, wenn ja, wird das datum in der zelle ausgelesen 
         // und in der variable _objectDatum gespeichert, dann wird die funktion writeToHtml() 
         // aufgerufen um die dynamischen inhalte zu aktualisieren (historische ereignisse, datum,etc)
-        
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.getElementById("kalenderDynamisch");
+            table.addEventListener("click", function(event) {
+                const clickedCell = event.target;
+                if (clickedCell.tagName === "TD" && clickedCell.innerHTML !== "") {
+                    const clickedDay = parseInt(clickedCell.innerHTML);
+                    _objectDatum.setDate(clickedDay);
+                    writeToHtml(); // es werden nur einige elemente geändert, dies muss noch für alle geändert werden
+                    createCalendar(); 
+                }
+            });
+        });  
