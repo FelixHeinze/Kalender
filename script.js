@@ -59,6 +59,13 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
     function writeToHtml() {
         console.log("writeToHtml: " + tag + "." + monat + "." + jahr);
         console.log("Test");
+        
+
+        let _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
+let _objectXjahr = new Date(_objectDatum.getFullYear(),11,31);
+let monatAusgeschrieben = months[_objectDatum.getMonth()];
+let tagAusgeschrieben = days[_objectDatum.getDay()];
+
         document.title = "Heute ist der " + tag + "." + monat + "." + jahr;
         document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tag + "." + monat + "." + jahr;
         document.getElementById("infoZuDatum").innerHTML = `Der ${tag}.${monat}.${jahr} ist ein ${tagAusgeschrieben} und zwar 
@@ -76,8 +83,13 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
     }
 
         function writeToHtml2(tag,monat,jahr) {
+            monat++;
         console.log("writeToHtm2l: " + tag + "." + monat + "." + jahr);
         console.log("Test2");
+                let _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
+let _objectXjahr = new Date(_objectDatum.getFullYear(),11,31);
+let monatAusgeschrieben = months[_objectDatum.getMonth()];
+let tagAusgeschrieben = days[_objectDatum.getDay()];
         document.title = "Heute ist der " + tag + "." + monat + "." + jahr;
         document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tag + "." + monat + "." + jahr;
         document.getElementById("infoZuDatum").innerHTML = `Der ${tag}.${monat}.${jahr} ist ein ${tagAusgeschrieben} und zwar 
@@ -174,8 +186,8 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
 
     function historischeEreignise()
 {
-    console.log(monatKalender.getMonth()+"/"+tagKalender.getDate())
-            fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (monatKalender.getMonth() + 1) + "/" + tagKalender.getDate())
+    console.log("monatkalender"+ (monatKalender + 1) + "/" + tagKalender.getDate());
+            fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + ((monatKalender + 1)) + "/" + tagKalender.getDate())
         .then(response => response.json())
         .then(data => {
             let ereignisseListe = document.getElementById("historischeEreignisse");
@@ -189,7 +201,7 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
     //api dokumentation bswp : https://de.wikipedia.org/api/rest_v1//Feed/onthisday/events/08/28
 
 
-    fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (monatKalender.getMonth() + 1) + "/" + tagKalender.getDate())
+    /* fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (monatKalender.getMonth() + 1) + "/" + tagKalender.getDate())
         .then(response => response.json())
         .then(data => {
             let ereignisse = document.getElementById("ereignisse");
@@ -200,7 +212,7 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
                 .join("");
         })
         .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error)); //fehlerausgabe wenn api anfrage fehl schlägt bswp 400er für client fehler 
-    
+     */
 
 
 }
@@ -217,6 +229,7 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
                 _objectDatum.setMonth(11); // Dezember
             }   
             writeToHtml2(_objectDatum.getDate(),_objectDatum.getMonth(), _objectDatum.getFullYear()); // neuschreiben der daten mit aktualisiertem datum
+            console.log("vorheriger monat");
         }
 
         function naechsterMonat() {
@@ -226,15 +239,16 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
                 _objectDatum.setMonth(0); // Januar
             }
             createCalendar();
-            writeToHtml2(_objectDatum.getDate(),_objectDatum.getMonth(), _objectDatum.getFullYear()); // neuschreiben der daten mit aktualisiertem datum
+            writeToHtml2(_objectDatum.getDate(),_objectDatum.getMonth(), _objectDatum.getFullYear());
+            console.log("nächster monat"); // neuschreiben der daten mit aktualisiertem datum
         }
 
         //überlegung für klick auf eine zelle in der tabelle --> onclick auf jede zelle , oder eventlistener auf die tabelle,
         //  dann wird überprüft ob die zelle angeklickt wurde, wenn ja, wird das datum in der zelle ausgelesen 
         // und in der variable _objectDatum gespeichert, dann wird die funktion writeToHtml() 
         // aufgerufen um die dynamischen inhalte zu aktualisieren (historische ereignisse, datum,etc)
-        document.addEventListener("DOMContentLoaded", 
-            function() {
+        document.addEventListener("DOMContentLoaded", function() 
+                {
                 const table = document.getElementById("kalenderDynamisch");
                  table.addEventListener("click", function(event)
                   {
@@ -254,12 +268,13 @@ let jahrKalender = new Date(_objectDatum.getFullYear());
                     console.log("Clicked year: " + jahrKalender);
                     //herausfinden welches datum im kalender gerade ist
 
-                    writeToHtml2(tagKalender.getDate(),monatKalender.getMonth(),jahrKalender.getFullYear()); 
+                    writeToHtml2(tagKalender.getDate(),monatKalender,jahrKalender); 
                     // neuschreiben der daten mit aktualisiertem datum 
+                    console.log("html neu geschrieben in eventlistener mit hmtml2");
                     createCalendar(); 
                     }
                         });
-                    });
+                });
 
 
 
