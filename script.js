@@ -35,55 +35,23 @@ const feiertage = [
 ]
  
 
-const _objectDatum = new Date();
-const _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
-const _objectXjahr = new Date(_objectDatum.getFullYear(),11,31);
+let _objectDatum = new Date();
+let _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
+let _objectXjahr = new Date(_objectDatum.getFullYear(),11,31);
 let monatAusgeschrieben = months[_objectDatum.getMonth()];
 let tag = _objectDatum.getDate();
 let jahr = _objectDatum.getFullYear();
 let tagAusgeschrieben = days[_objectDatum.getDay()];
 let monat = _objectDatum.getMonth();
 monat = monat+1;
-const heute = new Date();
-const heuteNorm = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
+let heute = new Date();
+let heuteNorm = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
+//variablen für kalenderklick 
+let tagKalender = _objectDatum.getDate();
+let monatKalender = _objectDatum.getMonth();
+let jahrKalender = _objectDatum.getFullYear();
 
    
-
-
-
-
-
-
-
-
-
-
-
-
- /* 
-        
-function writeToHtml() 
-  
-    document.title = "Heute ist der " + tag + "." + monat + "." + jahr;
-    document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tag + "." + monat + "." + jahr;
-    document.getElementById("datumAusgeschrieben").innerHTML = tag + " " + monatAusgeschrieben + " " + jahr;
-    document.getElementById("wochentag").innerHTML = tagAusgeschrieben;
-    document.getElementById("wieviele").innerHTML = Math.floor((tag - 1) / 7) + 1 + ".";
-    document.getElementById("wochentagAusgeschrieben").innerHTML = tagAusgeschrieben;
-    const monatsnamen = document.getElementsByClassName("monatsname"); //vereinfachung in schleife wenn mehrere elemente mit der gleichen klasse vorhanden sind
-    for (let i = 0; i < monatsnamen.length; i++) {
-        monatsnamen[i].innerHTML = monatAusgeschrieben;
-    }
-    document.getElementById("jahreszahl").innerHTML = jahr;
-    document.getElementById("xTag").innerHTML = (Math.floor((_objectDatum - _objectXtag) / (1000 * 60 * 60 * 24)) + 1);
-    document.getElementById("xJahresende").innerHTML = (Math.round((_objectXjahr - _objectDatum) / (1000 * 60 * 60 * 24)));
-    document.getElementById("monatstage").innerHTML = (new Date(jahr, monat, 0).getDate());
-    // dynamische inhalte für html elemente mit id, die in der index.html datei vorhanden sind, werden hier geschrieben
-    document.getElementById("ereignisseDatum").innerHTML = tag + "." + monat + "." + jahr;
-
-
-
-} // funktion vereinfachen um inhalte zu schreiben,  */
 
 //dynamische inhalte zu aktuellen datum 
     function writeToHtml() {
@@ -97,6 +65,20 @@ function writeToHtml()
             document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "ein gesetzlicher Feiertag in Deutschland.";
         }
     }
+
+    function writeToHtml2(tagKalender, monatKalender, jahrKalender) {
+        document.title = "Heute ist der " + tagKalender + "." + (monatKalender + 1) + "." + jahrKalender;
+        document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tagKalender + "." + (monatKalender + 1) + "." + jahrKalender;
+        document.getElementById("infoZuDatum").innerHTML = `Der ${tagKalender}.${monatKalender + 1}.${jahrKalender} ist ein ${days[new Date(jahrKalender, monatKalender, tagKalender).getDay()]} und zwar der ${Math.floor((tagKalender - 1) / 7) + 1}. ${days[new Date(jahrKalender, monatKalender, tagKalender).getDay()]} im Monat ${months[monatKalender]} des Jahres ${jahrKalender}. Es handelt sich um den ${Math.floor((new Date(jahrKalender, monatKalender, tagKalender) - new Date(jahrKalender, 0, 1)) / (1000 *    60 * 60 * 24)) + 1}. Tag des Jahres, was bedeutet, dass es noch ${Math.round((new Date(jahrKalender, 11, 31) - new Date(jahrKalender, monatKalender, tagKalender)) / (1000 * 60 * 60 * 24))} Tage bis zum Jahresende sind. Der Monat ${months[monatKalender]} hat insgesamt ${new Date(jahrKalender, monatKalender + 1, 0).getDate()} Tage. Heute ist `;
+        const isHoliday = feiertage.some(datumFeiertag => datumFeiertag.getTime() === new Date(jahrKalender, monatKalender, tagKalender).getTime());  
+        if (!isHoliday) {
+            document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "kein gesetzlicher Feiertag in Deutschland.";
+        } else {
+            document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "ein gesetzlicher Feiertag in Deutschland.";
+        }       
+    }      
+
+
 
     //funktion um die Tabelle zu erstellen
     function createCalendar() {
@@ -154,11 +136,23 @@ function writeToHtml()
 
    
    
-   writeToHtml();
-    createCalendar();
 
+
+
+            fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
+        .then(response => response.json())
+        .then(data => {
+            const ereignisseListe = document.getElementById("historischeEreignisse");
+            if (!ereignisseListe) return;
+            ereignisseListe.innerHTML = data.events.slice(0, 4)
+                .map(event => `<li>${event.year}: ${event.text}</li>`) 
+                .join("");
+        })
+        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
     //api anfrage für historische ereignisse am heutigen tag auf deutsch von wikipedia
-    //api dokumentation bswp : https://de.wikipedia.org/api/rest_v1/#/Feed/onthisday/events/08/26
+    //api dokumentation bswp : https://de.wikipedia.org/api/rest_v1//Feed/onthisday/events/08/28
+
+
     fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
         .then(response => response.json())
         .then(data => {
@@ -171,33 +165,26 @@ function writeToHtml()
         })
         .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error)); //fehlerausgabe wenn api anfrage fehl schlägt bswp 400er für client fehler 
     
-/*     //ausgabe von vier historischen ereignissen am heutigen tag, die in der api anfrage geladen wurden in der konsole
-    fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
-        .then(response => response.json())
-        .then(data => { 
-            console.log("Historische Ereignisse:", data.events.slice(0, 4)); // ausgabe von vier ereignissen, slice schneidet die ersten vier heraus
-        })
-        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error)); */
+
 
         //ausgabe von vier historischen ereignissen am heutigen tag, die in der api anfrage geladen wurden in der liste 
-        fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + _objectDatum.getDate())
-        .then(response => response.json())
-        .then(data => {
-            const ereignisseListe = document.getElementById("historischeEreignisse");
-            if (!ereignisseListe) return;
-            ereignisseListe.innerHTML = data.events.slice(0, 4)
-                .map(event => `<li>${event.year}: ${event.text}</li>`) 
-                .join("");
-        })
-        .catch(error => console.error("Fehler beim Laden der historischen Ereignisse:", error));
+
         //funktionalität für die buttons um den monat zu wechseln, die in der index.html datei vorhanden sind
         function vorherigerMonat() {
             _objectDatum.setMonth(_objectDatum.getMonth() - 1);  // monat aktualisieren und kalender neu laden
             createCalendar();
+            if (_objectDatum.getMonth() < 0) { // jahr anpassen
+                _objectDatum.setFullYear(_objectDatum.getFullYear() - 1);
+                _objectDatum.setMonth(11); // Dezember
+            }   
         }
 
         function naechsterMonat() {
             _objectDatum.setMonth(_objectDatum.getMonth() + 1); //monat aktualisieren und kalender neu laden 
+            if (_objectDatum.getMonth() >= 12) {// jahr anpassen
+                _objectDatum.setFullYear(_objectDatum.getFullYear() + 1);
+                _objectDatum.setMonth(0); // Januar
+            }
             createCalendar();
         }
 
@@ -213,12 +200,23 @@ function writeToHtml()
                 const clickedCell = event.target;
                 if (clickedCell.tagName === "TD" && clickedCell.innerHTML !== "") 
                     {
-                    const clickedDay = parseInt(clickedCell.innerHTML);
+                    const clickedDay = parseInt(clickedCell.innerHTML);#
+
+
                     _objectDatum.setDate(clickedDay);
-                    writeToHtml(); // es werden nur einige elemente geändert, dies muss noch für alle geändert werden
+                    tagKalender.setDate(clickedDay);
+                    monatKalender.setMonth(_objectDatum.getMonth());
+                    jahrKalender.setFullYear(_objectDatum.getFullYear());
+
+                    //herausfinden welches datum im kalender gerade ist
+
+                   writeToHtml2(tagKalender, monatKalender, jahrKalender); // neuschreiben der daten mit aktualisiertem datum 
                     createCalendar(); 
                     }
                         });
                     });
+
+     writeToHtml();
+    createCalendar();
 
 
