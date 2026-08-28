@@ -186,8 +186,8 @@ let tagAusgeschrieben = days[_objectDatum.getDay()];
 
     function historischeEreignise()
 {
-    console.log("monatkalender"+ (monatKalender + 1) + "/" + tagKalender.getDate());
-            fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + ((monatKalender + 1)) + "/" + tagKalender.getDate())
+    console.log("monatkalender"+ (_objectDatum.getMonth() + 1) + "/" + tagKalender.getDate());
+            fetch("https://de.wikipedia.org/api/rest_v1/feed/onthisday/events/" + (_objectDatum.getMonth() + 1) + "/" + tagKalender.getDate())
         .then(response => response.json())
         .then(data => {
             let ereignisseListe = document.getElementById("historischeEreignisse");
