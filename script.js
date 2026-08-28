@@ -47,17 +47,24 @@ monat = monat+1;
 let heute = new Date();
 let heuteNorm = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
 //variablen für kalenderklick 
-let tagKalender = _objectDatum.getDate();
-let monatKalender = _objectDatum.getMonth();
-let jahrKalender = _objectDatum.getFullYear();
+let tagKalender = new Date(_objectDatum.getDate());
+let monatKalender = new Date(_objectDatum.getMonth());
+let jahrKalender = new Date(_objectDatum.getFullYear());
 
-   
+       writeToHtml();
+    createCalendar(); 
 
 //dynamische inhalte zu aktuellen datum 
     function writeToHtml() {
+        console.log("writeToHtml: " + tag + "." + monat + "." + jahr);
+        console.log("Test");
         document.title = "Heute ist der " + tag + "." + monat + "." + jahr;
         document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tag + "." + monat + "." + jahr;
-        document.getElementById("infoZuDatum").innerHTML = `Der ${tag}.${monat}.${jahr} ist ein ${tagAusgeschrieben} und zwar der ${Math.floor((tag - 1) / 7) + 1}. ${tagAusgeschrieben} im Monat ${monatAusgeschrieben} des Jahres ${jahr}. Es handelt sich um den ${Math.floor((_objectDatum - _objectXtag) / (1000 * 60 * 60 * 24)) + 1}. Tag des Jahres, was bedeutet, dass es noch ${Math.round((_objectXjahr - _objectDatum) / (1000 * 60 * 60 * 24))} Tage bis zum Jahresende sind. Der Monat ${monatAusgeschrieben} hat insgesamt ${new Date(jahr, monat, 0).getDate()} Tage. Heute ist `;
+        document.getElementById("infoZuDatum").innerHTML = `Der ${tag}.${monat}.${jahr} ist ein ${tagAusgeschrieben} und zwar 
+        der ${Math.floor((tag - 1) / 7) + 1}. ${tagAusgeschrieben} im Monat ${monatAusgeschrieben} des Jahres ${jahr}. Es handelt sich um 
+        den ${Math.floor((_objectDatum - _objectXtag) / (1000 * 60 * 60 * 24)) + 1}. Tag des Jahres, was bedeutet, dass es
+        noch ${Math.round((_objectXjahr - _objectDatum) / (1000 * 60 * 60 * 24))} Tage bis zum Jahresende sind. Der Monat ${monatAusgeschrieben} hat 
+        insgesamt ${new Date(jahr, monat, 0).getDate()} Tage. Heute ist `;
         const isHoliday = feiertage.some(datumFeiertag => datumFeiertag.getTime() === _objectDatum.getTime());  
         if (!isHoliday) {
             document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "kein gesetzlicher Feiertag in Deutschland.";
@@ -67,9 +74,16 @@ let jahrKalender = _objectDatum.getFullYear();
     }
 
     function writeToHtml2(tagKalender, monatKalender, jahrKalender) {
+        console.log("writeToHtml2: " + tagKalender + "." + (monatKalender + 1) + "." + jahrKalender);
         document.title = "Heute ist der " + tagKalender + "." + (monatKalender + 1) + "." + jahrKalender;
         document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tagKalender + "." + (monatKalender + 1) + "." + jahrKalender;
-        document.getElementById("infoZuDatum").innerHTML = `Der ${tagKalender}.${monatKalender + 1}.${jahrKalender} ist ein ${days[new Date(jahrKalender, monatKalender, tagKalender).getDay()]} und zwar der ${Math.floor((tagKalender - 1) / 7) + 1}. ${days[new Date(jahrKalender, monatKalender, tagKalender).getDay()]} im Monat ${months[monatKalender]} des Jahres ${jahrKalender}. Es handelt sich um den ${Math.floor((new Date(jahrKalender, monatKalender, tagKalender) - new Date(jahrKalender, 0, 1)) / (1000 *    60 * 60 * 24)) + 1}. Tag des Jahres, was bedeutet, dass es noch ${Math.round((new Date(jahrKalender, 11, 31) - new Date(jahrKalender, monatKalender, tagKalender)) / (1000 * 60 * 60 * 24))} Tage bis zum Jahresende sind. Der Monat ${months[monatKalender]} hat insgesamt ${new Date(jahrKalender, monatKalender + 1, 0).getDate()} Tage. Heute ist `;
+        document.getElementById("infoZuDatum").innerHTML = `Der ${tagKalender}.${monatKalender + 1}.${jahrKalender} ist 
+        ein ${days[new Date(jahrKalender, monatKalender, tagKalender).getDay()]} und zwar 
+        der ${Math.floor((tagKalender - 1) / 7) + 1}. ${days[new Date(jahrKalender, monatKalender, tagKalender).getDay()]} im 
+        Monat ${months[monatKalender]} des Jahres ${jahrKalender}. Es handelt sich um 
+        den ${Math.floor((new Date(jahrKalender, monatKalender, tagKalender) - new Date(jahrKalender, 0, 1)) / (1000 *    60 * 60 * 24)) + 1}. Tag des Jahres,
+         was bedeutet, dass es noch ${Math.round((new Date(jahrKalender, 11, 31) - new Date(jahrKalender, monatKalender, tagKalender)) / (1000 * 60 * 60 * 24))} Tage bis zum 
+         Jahresende sind. Der Monat ${months[monatKalender]} hat insgesamt ${new Date(jahrKalender, monatKalender + 1, 0).getDate()} Tage. Heute ist `;
         const isHoliday = feiertage.some(datumFeiertag => datumFeiertag.getTime() === new Date(jahrKalender, monatKalender, tagKalender).getTime());  
         if (!isHoliday) {
             document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "kein gesetzlicher Feiertag in Deutschland.";
@@ -177,6 +191,7 @@ let jahrKalender = _objectDatum.getFullYear();
                 _objectDatum.setFullYear(_objectDatum.getFullYear() - 1);
                 _objectDatum.setMonth(11); // Dezember
             }   
+            writeToHtml2(_objectDatum.getDate(),_objectDatum.getMonth(), _objectDatum.getFullYear()); // neuschreiben der daten mit aktualisiertem datum
         }
 
         function naechsterMonat() {
@@ -186,6 +201,7 @@ let jahrKalender = _objectDatum.getFullYear();
                 _objectDatum.setMonth(0); // Januar
             }
             createCalendar();
+            writeToHtml2(_objectDatum.getDate(),_objectDatum.getMonth(), _objectDatum.getFullYear()); // neuschreiben der daten mit aktualisiertem datum
         }
 
         //überlegung für klick auf eine zelle in der tabelle --> onclick auf jede zelle , oder eventlistener auf die tabelle,
@@ -200,23 +216,25 @@ let jahrKalender = _objectDatum.getFullYear();
                 const clickedCell = event.target;
                 if (clickedCell.tagName === "TD" && clickedCell.innerHTML !== "") 
                     {
-                    const clickedDay = parseInt(clickedCell.innerHTML);#
+                    const clickedDay = parseInt(clickedCell.innerHTML);
 
 
                     _objectDatum.setDate(clickedDay);
+                    console.log("Clicked day: " + _objectDatum.getDate());
                     tagKalender.setDate(clickedDay);
-                    monatKalender.setMonth(_objectDatum.getMonth());
-                    jahrKalender.setFullYear(_objectDatum.getFullYear());
-
+                    console.log("Clicked day: " + tagKalender.getDate());
+                    monatKalender = _objectDatum.getMonth();
+                    console.log("Clicked month: " + monatKalender);
+                    jahrKalender = _objectDatum.getFullYear();
+                    console.log("Clicked year: " + jahrKalender);
                     //herausfinden welches datum im kalender gerade ist
 
-                   writeToHtml2(tagKalender, monatKalender, jahrKalender); // neuschreiben der daten mit aktualisiertem datum 
+                    writeToHtml2(tagKalender, monatKalender, jahrKalender); // neuschreiben der daten mit aktualisiertem datum 
                     createCalendar(); 
                     }
                         });
                     });
 
-     writeToHtml();
-    createCalendar();
+
 
 
