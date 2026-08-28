@@ -33,6 +33,8 @@ const feiertage = [
     new Date(2026,11,24),
     new Date(2026,7,6)//testfeiertag für august 
 ]
+ 
+
 const _objectDatum = new Date();
 const _objectXtag = new Date(_objectDatum.getFullYear(),0,1);
 const _objectXjahr = new Date(_objectDatum.getFullYear(),11,31);
@@ -42,28 +44,26 @@ let jahr = _objectDatum.getFullYear();
 let tagAusgeschrieben = days[_objectDatum.getDay()];
 let monat = _objectDatum.getMonth();
 monat = monat+1;
-
-writeToHtml();
-
-//funktion um automatisch die dynamischen inhalte in die html datei zu schreiben, die in der index.html datei mit id versehen sind
-
-
-
-// Feiertage in array gespeichert , neues datum wird erstellt, um nur das Datum zu vergleichen, ohne Uhrzeit. Dann wird überprüft, 
-// ob das heutige Datum in den 
-// Feiertagen enthalten ist.
-//  Wenn ja, wird "ein" angezeigt, sonst "kein".
-
 const heute = new Date();
 const heuteNorm = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
-const istFeiertag = feiertage.some(datumFeiertag => datumFeiertag.getTime() === heuteNorm.getTime());
-if (!istFeiertag) {
-    document.getElementById("feiertag").innerHTML = "kein"; }
-    else {
-        document.getElementById("feiertag").innerHTML = "ein"; 
-    }     
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+ /* 
         
-function writeToHtml() {
+function writeToHtml() 
+  
     document.title = "Heute ist der " + tag + "." + monat + "." + jahr;
     document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tag + "." + monat + "." + jahr;
     document.getElementById("datumAusgeschrieben").innerHTML = tag + " " + monatAusgeschrieben + " " + jahr;
@@ -83,7 +83,20 @@ function writeToHtml() {
 
 
 
-}
+} // funktion vereinfachen um inhalte zu schreiben,  */
+
+//dynamische inhalte zu aktuellen datum 
+    function writeToHtml() {
+        document.title = "Heute ist der " + tag + "." + monat + "." + jahr;
+        document.getElementById("mainHeadline").innerHTML = "Kalenderblatt vom " + tag + "." + monat + "." + jahr;
+        document.getElementById("infoZuDatum").innerHTML = `Der ${tag}.${monat}.${jahr} ist ein ${tagAusgeschrieben} und zwar der ${Math.floor((tag - 1) / 7) + 1}. ${tagAusgeschrieben} im Monat ${monatAusgeschrieben} des Jahres ${jahr}. Es handelt sich um den ${Math.floor((_objectDatum - _objectXtag) / (1000 * 60 * 60 * 24)) + 1}. Tag des Jahres, was bedeutet, dass es noch ${Math.round((_objectXjahr - _objectDatum) / (1000 * 60 * 60 * 24))} Tage bis zum Jahresende sind. Der Monat ${monatAusgeschrieben} hat insgesamt ${new Date(jahr, monat, 0).getDate()} Tage. Heute ist `;
+        const isHoliday = feiertage.some(datumFeiertag => datumFeiertag.getTime() === _objectDatum.getTime());  
+        if (!isHoliday) {
+            document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "kein gesetzlicher Feiertag in Deutschland.";
+        } else {
+            document.getElementById("infoZuDatum").innerHTML = document.getElementById("infoZuDatum").innerHTML + "ein gesetzlicher Feiertag in Deutschland.";
+        }
+    }
 
     //funktion um die Tabelle zu erstellen
     function createCalendar() {
@@ -140,6 +153,8 @@ function writeToHtml() {
     }
 
    
+   
+   writeToHtml();
     createCalendar();
 
     //api anfrage für historische ereignisse am heutigen tag auf deutsch von wikipedia
@@ -190,15 +205,20 @@ function writeToHtml() {
         //  dann wird überprüft ob die zelle angeklickt wurde, wenn ja, wird das datum in der zelle ausgelesen 
         // und in der variable _objectDatum gespeichert, dann wird die funktion writeToHtml() 
         // aufgerufen um die dynamischen inhalte zu aktualisieren (historische ereignisse, datum,etc)
-        document.addEventListener("DOMContentLoaded", function() {
-            const table = document.getElementById("kalenderDynamisch");
-            table.addEventListener("click", function(event) {
+        document.addEventListener("DOMContentLoaded", 
+            function() {
+                const table = document.getElementById("kalenderDynamisch");
+                 table.addEventListener("click", function(event)
+                  {
                 const clickedCell = event.target;
-                if (clickedCell.tagName === "TD" && clickedCell.innerHTML !== "") {
+                if (clickedCell.tagName === "TD" && clickedCell.innerHTML !== "") 
+                    {
                     const clickedDay = parseInt(clickedCell.innerHTML);
                     _objectDatum.setDate(clickedDay);
                     writeToHtml(); // es werden nur einige elemente geändert, dies muss noch für alle geändert werden
                     createCalendar(); 
-                }
-            });
-        });  
+                    }
+                        });
+                    });
+
+
